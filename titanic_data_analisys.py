@@ -45,6 +45,7 @@ st.write(
     A manipulação dos dados e a visualização são apresentados nos tópicos a seguir."""
 )
 
+
 st.header("Pré-Processamento")
 st.write(
     "O Pré-processamento consistiu em carregar o dataset do titanic e fazer manipulações de dados para remover dados faltantes e alterar tipos de dados de algumas colunas."
@@ -56,11 +57,13 @@ st.write(titanic_df.head())
 
 titanic_df = preprocessing(titanic_df.copy())
 
+
 st.subheader("Remoção de Dados nulos e Filtro de Colunas")
 st.write("As linhas com valores nulos na coluna `Age` foram removidas.")
 st.write(
     "Além disso, apenas as colunas `PassengerId`,  `Survived`, `Pclass`, `Sex`, `Age` e `Embarked` foram mantidas para a visualização dos dados."
 )
+
 
 st.subheader("Conversão de Tipos de Dados")
 st.write(
@@ -69,6 +72,7 @@ st.write(
 st.write(
     "Esta conversão também foi aplicada à coluna `Embarked`, que teve os valores mapeados de `C` para `0`, `Q` para `1` e `S` para `2`."
 )
+
 
 st.header("Visualização de Dados")
 st.subheader("Histograma da Idade dos Passageiros")
@@ -102,6 +106,7 @@ st.code(
 titanic_df["Age"].median()  # 28
 """
 )
+
 
 st.subheader("Histograma da Sexo dos Passageiros")
 st.write(
@@ -153,6 +158,7 @@ ax.set_yticks([])
 ax.text(0.05, 206.5, "Masculino", ha="center", va="bottom", rotation=90, color="white")
 ax.text(0.95, 110.5, "Feminino", ha="center", va="bottom", rotation=90, color="white")
 st.pyplot(fig)
+
 
 st.subheader("Gráfico de Pizza do Local de Embarque")
 st.write("Quase 80% dos passageiros embarcaram no porto de Southampton.")
@@ -261,4 +267,29 @@ ax.text(1, deaths_by_sex[1] + 0.05, deaths_by_sex[1], ha="center", va="bottom")
 
 plt.legend(loc="upper right")
 
+st.pyplot(fig)
+
+
+st.subheader("Porcentagem de Homens sobre sobreviventes")
+st.write("A maioria dos passageiros do Sexo Masculino não sobreviveu à tragédia.")
+
+men_survived_percentage = (survivors_by_sex[0] / titanic_df.loc[(titanic_df["Sex"] == 0)]["Sex"].count()) * 100
+survived_men_serie = pd.Series(
+    [survivors_by_sex[0], titanic_df.loc[(titanic_df["Sex"] == 0) & (titanic_df["Survived"] == 0)]["Sex"].count()]
+)
+
+fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+
+patches, texts, autotexts = ax.pie(
+    x=survived_men_serie.values,
+    autopct="%1.2f%%",
+    colors=[COLOR_TAB_BLUE, COLOR_TAB_GRAY],
+    # shadow=True,
+    explode=(0, 0.1),
+    textprops={"color": "white"},
+)
+
+ax.set_title("Sobreviventes do Sexo Masculino")
+
+plt.legend(labels=["Sobreviveu", "Não sobreviveu"], loc="upper right")
 st.pyplot(fig)
