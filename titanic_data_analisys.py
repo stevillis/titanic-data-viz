@@ -3,10 +3,10 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import streamlit as st
-
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 
 TITANIC_DATASET_URL = "https://raw.githubusercontent.com/stevillis/titanic-data-viz/master/titanic.csv"
-
 COLOR_TAB_GRAY = "tab:gray"
 COLOR_TAB_BLUE = "tab:blue"
 
@@ -28,6 +28,21 @@ def preprocessing(df):
     df["Embarked"].replace("S", 2, inplace=True)
 
     return df
+
+
+def train_survival(df):
+    df.dropna(inplace=True)
+
+    X = df.drop(["Survived", "PassengerId"], axis=1)
+    y = df["Survived"]  # trying to predict
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=101)
+
+    log_model = LogisticRegression()
+
+    log_model.fit(X_train, y_train)
+
+    return log_model
 
 
 st.title("Visualização de Dados do Titanic")
@@ -383,3 +398,53 @@ fig, ax = plt.subplots(1, 1, figsize=(10, 6))
 sns.heatmap(titanic_df[["Survived", "Pclass", "Sex", "Age", "Embarked"]].corr(), annot=True, fmt=".2f")
 
 st.pyplot(fig)
+
+st.subheader("Será que você teria sobrevivido ao naufrágio do Titanic?")
+st.write(
+    "Usando a Regressão Logística, podemos determinar a probabilidade de sobrevivência de acordo com a sua `Classe`, `Sexo`, `Idade` e `Porto de Embarque`."
+)
+st.write("")
+
+if "trained_model" not in st.session_state:
+    trained_model = train_survival(titanic_df.copy())
+    st.session_state["trained_model"] = trained_model
+
+
+with st.form("my_form"):
+    st.write("Use os campos abaixo e veja se você teria sobrevivido.")
+    pclass = st.selectbox("Classe", ("1ª Classe", "2ª Classe", "3ª Classe"))
+    sex = st.radio("Sexo", ["Masculino", "Feminino"])
+    age = st.number_input("Idade", min_value=1, max_value=150, step=1)
+    embarked = st.selectbox("Porto de Embarque", ("Cherbourg", "Queenstown", "Southampton"))
+
+    submitted = st.form_submit_button("Calcular")
+    if submitted:
+        log_model = st.session_state.trained_model
+
+        if log_model:
+            if pclass == "1ª Class":
+                pclas_numeric = 1
+            elif pclass == "2ª Class":
+                pclas_numeric = 2
+            else:
+                pclas_numeric = 3
+
+            if embarked == "Cherbourg":
+                embarked_numeric = 0
+            elif embarked == "Queenstown":
+                embarked_numeric = 1
+            else:
+                embarked_numeric = 2
+
+            sex_numeric = 0 if sex == "Masculino" else 1
+
+            y_predicted = log_model.predict(
+                pd.DataFrame(
+                    {"Pclass": [pclas_numeric], "Sex": [sex_numeric], "Age": [age], "Embarked": [embarked_numeric]}
+                )
+            )
+
+            if y_predicted[0] == 1:
+                st.write(":green[Você teria sobrevivido!]")
+            else:
+                st.write(":red[Você teria morrido!]")
