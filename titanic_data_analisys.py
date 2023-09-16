@@ -270,7 +270,7 @@ plt.legend(loc="upper right")
 st.pyplot(fig)
 
 
-st.subheader("Porcentagem de Homens sobre sobreviventes")
+st.subheader("Porcentagem de Homens sobreviventes")
 st.write("A maioria dos passageiros do Sexo Masculino não sobreviveu à tragédia.")
 
 men_survived_percentage = (survivors_by_sex[0] / titanic_df.loc[(titanic_df["Sex"] == 0)]["Sex"].count()) * 100
@@ -284,12 +284,35 @@ patches, texts, autotexts = ax.pie(
     x=survived_men_serie.values,
     autopct="%1.2f%%",
     colors=[COLOR_TAB_BLUE, COLOR_TAB_GRAY],
-    # shadow=True,
     explode=(0, 0.1),
     textprops={"color": "white"},
 )
 
 ax.set_title("Sobreviventes do Sexo Masculino")
+
+plt.legend(labels=["Sobreviveu", "Não sobreviveu"], loc="upper right")
+st.pyplot(fig)
+
+st.subheader("Porcentagem de Mulheres sobreviventes")
+st.write("A maioria dos passageiros do Sexo Feminino sobreviveu ao naufrágio.")
+
+women_survived_percentage = (survivors_by_sex[1] / titanic_df.loc[(titanic_df["Sex"] == 1)]["Sex"].count()) * 100
+survived_women_series = pd.Series(
+    [survivors_by_sex[1], titanic_df.loc[(titanic_df["Sex"] == 1) & (titanic_df["Survived"] == 0)]["Sex"].count()]
+)
+
+fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+
+patches, texts, autotexts = ax.pie(
+    x=survived_women_series.values,
+    autopct="%1.2f%%",
+    colors=["tab:pink", "tab:gray"],
+    explode=(0.1, 0),
+    startangle=90,
+    textprops={"color": "white"},
+)
+
+ax.set_title("Sobreviventes do Sexo Feminino")
 
 plt.legend(labels=["Sobreviveu", "Não sobreviveu"], loc="upper right")
 st.pyplot(fig)
