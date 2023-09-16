@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
 
@@ -49,6 +50,8 @@ st.write("As 5 primeiras linhas do dataset original, que contém 891 registros, 
 titanic_df = pd.read_csv(TITANIC_DATASET_URL)
 st.write(titanic_df.head())
 
+titanic_df = preprocessing(titanic_df.copy())
+
 st.subheader("Remoção de Dados nulos e Filtro de Colunas")
 st.write("As linhas com valores nulos na coluna `Age` foram removidas.")
 st.write(
@@ -63,4 +66,35 @@ st.write(
     "Esta conversão também foi aplicada à coluna `Embarked`, que teve os valores mapeados de `C` para `0`, `Q` para `1` e `S` para `2`."
 )
 
-titanic_df = preprocessing(titanic_df.copy())
+st.header("Visualização de Dados")
+st.subheader("Histograma da Idade dos Passageiros")
+st.write("O Histograma da Idade dos Passageiros mostra que a maior parte destes tinham entre 20 e 30 anos.")
+
+st.code(
+    """
+fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+
+ax.hist(titanic_df["Age"])
+
+ax.set_title("Histograma da Idade dos Passageiros")
+ax.set_xlabel("Idade")
+ax.set_ylabel("Quantidade de Passageiros")
+plt.show()
+"""
+)
+
+fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+
+ax.hist(titanic_df["Age"])
+
+ax.set_title("Histograma da Idade dos Passageiros")
+ax.set_xlabel("Idade")
+ax.set_ylabel("Quantidade de Passageiros")
+st.pyplot(fig)
+
+st.write("O que confirmamos analisando a mediana das idades.")
+st.code(
+    """
+titanic_df["Age"].median()  # 28
+"""
+)
