@@ -293,6 +293,7 @@ ax.set_title("Sobreviventes do Sexo Masculino")
 plt.legend(labels=["Sobreviveu", "Não sobreviveu"], loc="upper right")
 st.pyplot(fig)
 
+
 st.subheader("Porcentagem de Mulheres sobreviventes")
 st.write("A maioria dos passageiros do Sexo Feminino sobreviveu ao naufrágio.")
 
@@ -315,4 +316,25 @@ patches, texts, autotexts = ax.pie(
 ax.set_title("Sobreviventes do Sexo Feminino")
 
 plt.legend(labels=["Sobreviveu", "Não sobreviveu"], loc="upper right")
+st.pyplot(fig)
+
+
+st.subheader("Sobreviventes por Idade")
+st.write(
+    "Neste gráfico vemos que a maior parte das crianças sobreviveu, enquanto houve mais mortes de pessoas com idades próximas à idade média."
+)
+
+survivors_by_age = titanic_df.loc[(titanic_df["Survived"] == 1)][["Age", "Survived"]].groupby("Age").sum().reset_index()
+death_by_age = titanic_df.loc[(titanic_df["Survived"] == 0)][["Age", "Survived"]].groupby("Age").count().reset_index()
+
+fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+
+ax.bar(survivors_by_age["Age"], survivors_by_age["Survived"], label="Sobreviveu")
+ax.bar(death_by_age["Age"], death_by_age["Survived"], label="Não sobreviveu", color=COLOR_TAB_GRAY, alpha=0.4)
+
+ax.set_title("Sobreviventes por idade")
+ax.set_xlabel("Idade")
+ax.set_ylabel("Quantidade de Passageiros")
+
+plt.legend()
 st.pyplot(fig)
