@@ -73,6 +73,8 @@ st.write(
 st.write(
     "Esta conversão também foi aplicada à coluna `Embarked`, que teve os valores mapeados de `C` para `0`, `Q` para `1` e `S` para `2`."
 )
+st.write("Após o Pré-Processamento, temos o dataset neste formato:")
+st.write(titanic_df.head())
 
 
 st.header("Visualização de Dados")
