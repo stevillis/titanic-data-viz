@@ -149,3 +149,34 @@ ax.set_yticks([])
 ax.text(0.05, 206.5, "Masculino", ha="center", va="bottom", rotation=90, color="white")
 ax.text(0.95, 110.5, "Feminino", ha="center", va="bottom", rotation=90, color="white")
 st.pyplot(fig)
+
+st.subheader("Gráfico de Pizza do Local de Embarque")
+st.write("Quase 80% dos passageiros embarcaram no porto de Southampton.")
+
+st.code(
+    """
+fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+
+embarked_df = titanic_df.groupby(["Embarked"]).sum()
+labels = ["Cherbourg", "Queenstown", "Southampton"]
+sizes = embarked_df["PassengerId"]
+
+plt.pie(sizes, labels=labels, autopct="%1.1f%%", textprops={"size": "smaller"})
+
+ax.set_title("Local de Embarque dos Passageiros")
+
+plt.show()
+"""
+)
+
+fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+
+embarked_df = titanic_df.groupby(["Embarked"]).sum()
+labels = ["Cherbourg", "Queenstown", "Southampton"]
+sizes = embarked_df["PassengerId"]
+
+plt.pie(sizes, labels=labels, autopct="%1.1f%%", textprops={"size": "smaller"})
+
+ax.set_title("Local de Embarque dos Passageiros")
+
+st.pyplot(fig)
