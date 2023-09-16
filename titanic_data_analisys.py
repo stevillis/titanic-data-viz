@@ -1,9 +1,13 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import streamlit as st
 
 
 TITANIC_DATASET_URL = "https://raw.githubusercontent.com/stevillis/titanic-data-viz/master/titanic.csv"
+
+COLOR_TAB_GRAY = "tab:gray"
+COLOR_TAB_BLUE = "tab:blue"
 
 
 def preprocessing(df):
@@ -212,5 +216,49 @@ sizes = embarked_df["PassengerId"]
 plt.pie(sizes, labels=labels, autopct="%1.1f%%")
 
 ax.set_title("Classe dos Passageiros")
+
+st.pyplot(fig)
+
+st.header("Visualização de Dados Agregados")
+st.subheader("Sobreviventes por Sexo")
+st.write("Neste gráfico vemos que a maioria dos sobreviventes é do Sexo Feminino.")
+
+survivors_by_sex = titanic_df.loc[(titanic_df["Survived"] == 1)][["Sex", "Survived"]].groupby("Sex")["Survived"].sum()
+deaths_by_sex = titanic_df.loc[(titanic_df["Survived"] == 0)][["Sex", "Survived"]].groupby("Sex")["Survived"].count()
+
+fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+
+ax.bar(
+    np.array(["Masculino", "Feminino"]),
+    survivors_by_sex.values,
+    label="Sobreviveu",
+    color=COLOR_TAB_BLUE,
+    width=0.4,
+    alpha=0.8,
+    align="edge",
+)
+
+ax.bar(
+    np.array(["Masculino", "Feminino"]),
+    deaths_by_sex.values,
+    label="Não sobreviveu",
+    color=COLOR_TAB_GRAY,
+    width=0.4,
+    alpha=0.8,
+)
+
+
+ax.set_title("Sobreviventes por sexo")
+ax.set_xlabel("Sexo")
+ax.set_ylabel("Quantidade de Passageiros")
+
+ax.text(0.2, survivors_by_sex[0] + 0.05, survivors_by_sex[0], ha="center", va="bottom")
+ax.text(1.2, survivors_by_sex[1] + 0.05, survivors_by_sex[1], ha="center", va="bottom")
+
+
+ax.text(0, deaths_by_sex[0] + 0.05, deaths_by_sex[0], ha="center", va="bottom")
+ax.text(1, deaths_by_sex[1] + 0.05, deaths_by_sex[1], ha="center", va="bottom")
+
+plt.legend(loc="upper right")
 
 st.pyplot(fig)
