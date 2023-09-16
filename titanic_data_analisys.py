@@ -98,3 +98,54 @@ st.code(
 titanic_df["Age"].median()  # 28
 """
 )
+
+st.subheader("Histograma da Sexo dos Passageiros")
+st.write(
+    "A partir do Histograma do Sexo dos Passageiros, visualizamos que a maior parte dos tripulantes era do Sexo Masculino."
+)
+
+st.code(
+    """
+fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+
+ax.hist(titanic_df["Sex"])
+
+ax.set_title("Histograma do Sexo dos Passageiros")
+ax.set_xlabel("Sexo")
+ax.set_ylabel("Quantidade de Passageiros")
+
+qtd_male = titanic_df[titanic_df["Sex"] == 0]["Sex"].count()
+qtd_female = titanic_df[titanic_df["Sex"] == 1]["Sex"].count()
+
+ax.text(0.05, qtd_male + 0.05, qtd_male, ha="center", va="bottom")
+ax.text(0.95, qtd_female + 0.05, qtd_female, ha="center", va="bottom")
+
+ax.set_xticks([])
+ax.set_yticks([])
+
+ax.text(0.05, 206.5, "Masculino", ha="center", va="bottom", rotation=90, color="white")
+ax.text(0.95, 110.5, "Feminino", ha="center", va="bottom", rotation=90, color="white")
+plt.show()
+"""
+)
+
+fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+
+ax.hist(titanic_df["Sex"])
+
+ax.set_title("Histograma do Sexo dos Passageiros")
+ax.set_xlabel("Sexo")
+ax.set_ylabel("Quantidade de Passageiros")
+
+qtd_male = titanic_df[titanic_df["Sex"] == 0]["Sex"].count()
+qtd_female = titanic_df[titanic_df["Sex"] == 1]["Sex"].count()
+
+ax.text(0.05, qtd_male + 0.05, qtd_male, ha="center", va="bottom")
+ax.text(0.95, qtd_female + 0.05, qtd_female, ha="center", va="bottom")
+
+ax.set_xticks([])
+ax.set_yticks([])
+
+ax.text(0.05, 206.5, "Masculino", ha="center", va="bottom", rotation=90, color="white")
+ax.text(0.95, 110.5, "Feminino", ha="center", va="bottom", rotation=90, color="white")
+st.pyplot(fig)
