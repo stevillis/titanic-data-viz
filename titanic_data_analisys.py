@@ -180,3 +180,37 @@ plt.pie(sizes, labels=labels, autopct="%1.1f%%", textprops={"size": "smaller"})
 ax.set_title("Local de Embarque dos Passageiros")
 
 st.pyplot(fig)
+
+
+st.subheader("Gráfico de Pizza de Classe dos Passageiros")
+st.write(
+    "Este gráfico mostra que quase metade dos passageiros eram da 3ª classe, enquanto pouco menos de 1/4 era da 2ª classe e pouco mais de 1/4 era da 1ª class."
+)
+
+st.code(
+    """
+fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+
+embarked_df = titanic_df.groupby(["Pclass"]).sum()
+labels = ["1ª classe", "2ª classe", "3ª classe"]
+sizes = embarked_df["PassengerId"]
+
+plt.pie(sizes, labels=labels, autopct="%1.1f%%")
+
+ax.set_title("Classe dos Passageiros")
+
+plt.show()
+"""
+)
+
+fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+
+embarked_df = titanic_df.groupby(["Pclass"]).sum()
+labels = ["1ª classe", "2ª classe", "3ª classe"]
+sizes = embarked_df["PassengerId"]
+
+plt.pie(sizes, labels=labels, autopct="%1.1f%%")
+
+ax.set_title("Classe dos Passageiros")
+
+st.pyplot(fig)
