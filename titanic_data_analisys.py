@@ -212,7 +212,7 @@ st.pyplot(fig)
 
 st.subheader("Gráfico de Pizza de Classe dos Passageiros")
 st.write(
-    "Este gráfico mostra que quase metade dos passageiros eram da 3ª classe, enquanto pouco menos de 1/4 era da 2ª classe e pouco mais de 1/4 era da 1ª class."
+    "Este gráfico mostra que quase metade dos passageiros eram da 3ª classe, enquanto pouco menos de 1/4 era da 2ª classe e pouco mais de 1/4 era da 1ª classe."
 )
 
 st.code(
@@ -448,3 +448,18 @@ with st.form("my_form"):
                 st.write(":green[Você teria sobrevivido!]")
             else:
                 st.write(":red[Você teria morrido!]")
+
+st.header("Referências")
+st.write(
+    """
+- https://github.com/carlosfab/data_science/blob/master/Titanic.ipynb
+- https://www.kaggle.com/competitions/titanic
+- https://www.kaggle.com/code/roblexnana/data-viz-tutorial-with-titanic-and-seaborn
+- https://predictivelearning.github.io/projects/Project_053_Visualizing_Data_with_Seaborn__Titanic.html
+- https://dev.to/shehanat/how-to-create-an-age-distribution-graph-using-python-pandas-and-seaborn-2o5n
+- https://medium.com/@melodyyip_/titanic-survival-prediction-using-machine-learning-89a779656113
+- https://www.kaggle.com/code/dejavu23/titanic-survival-seaborn-and-ensembles
+- https://blog.devgenius.io/analyzing-the-titanic-dataset-a-story-of-tragedy-and-survival-48883b2f2d48
+- https://www.kaggle.com/code/punit0811/linear-regression-with-titanic-dataset
+"""
+)
