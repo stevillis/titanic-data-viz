@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
 import streamlit as st
 
 
@@ -337,4 +338,46 @@ ax.set_xlabel("Idade")
 ax.set_ylabel("Quantidade de Passageiros")
 
 plt.legend()
+st.pyplot(fig)
+
+
+st.subheader("Sobreviventes por Classe")
+st.write("Neste gráfico vemos que a maior parte dos sobreviventes era da 1ª Classe.")
+
+survivors_by_class = (
+    titanic_df.loc[(titanic_df["Survived"] == 1)][["Pclass", "Survived"]].groupby("Pclass").count().reset_index()
+)
+death_by_class = (
+    titanic_df.loc[(titanic_df["Survived"] == 0)][["Pclass", "Survived"]].groupby("Pclass").count().reset_index()
+)
+
+fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+
+ax.bar(survivors_by_class["Pclass"], survivors_by_class["Survived"], label="Sobreviveu")
+ax.bar(
+    death_by_class["Pclass"],
+    death_by_class["Survived"],
+    label="Não sobreviveu",
+    alpha=0.4,
+    color=COLOR_TAB_GRAY,
+)
+
+ax.set_title("Sobreviventes por Classe")
+ax.set_xlabel("Classe")
+ax.set_ylabel("Quantidade de Passageiros")
+
+ax.set_xticklabels(["1ª Classe", "2ª Classe", "3ª Classe"])
+ax.set_xticks([1, 2, 3])
+
+plt.legend()
+st.pyplot(fig)
+
+
+st.subheader("Mapa de Calor")
+st.write("Nesta representação percebemos a maior correlação ocorre entre as `Sex` e `Survived`.")
+
+fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+
+sns.heatmap(titanic_df[["Survived", "Pclass", "Sex", "Age", "Embarked"]].corr(), annot=True, fmt=".2f")
+
 st.pyplot(fig)
